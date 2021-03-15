@@ -1,0 +1,61 @@
+body{
+  margin: 0px;
+  padding: 0px;
+}
+
+img{
+  width: 32.5rem;
+}
+
+input{
+  width: 50%!important;
+}
+
+h2{
+  font-family: 'Rubik', sans-serif;
+}
+
+.home{
+  display: grid;
+  grid-template-columns: 55vw 35vw;
+}
+
+.lead{
+  margin-bottom: 3.5rem;
+}
+
+#info{
+  padding-left: 4%;
+  padding-top: 5%;
+}
+
+
+@media screen and (max-width: 768px) {
+
+  img{
+    width: 20rem;
+  }
+
+  .home{
+    grid-template-columns: 65vw 25vw;
+  }
+
+  #svg{
+    padding-top: 25%;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  
+  #svg{
+    visibility: hidden;
+  }
+
+  .home{
+    grid-template-columns: auto;
+  }
+
+  input{
+    width: 75%!important;
+  }
+}

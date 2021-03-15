@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+
+<body>
+	Room ID:- {{room_id}} User name:- {{u_name}}
+	<form>
+		<input type="text" id='username'>
+  <input type="submit" value="Send" id='but'></input>
+  </form>
+  <br>
+  <br>
+  <ul id='msgs'></ul>
+  <br>
+  <br>
+    <audio controls preload='auto'>
+        <source src="{{ url_for('something') }}" type="audio/x-wav;codec=pcm">
+        Your browser does not support the audio element.
+    </audio>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.5/socket.io.min.js" integrity="sha512-L9L4VhE0D58fCxtJiYDHbIzSVfNGY24rhQPWTZPschTVKLpucPsLeT0FSjfnylLYARalTQqgwXsjjhi+wUTwIw==" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+    var u_name = "{{u_name}}";
+    var socket = io('https://hackathon-code-pranav.shanon333.repl.co');
+		var socket2 = io('https://hackathon-code-pranav.shanon333.repl.co/{{ room_id }}');
+    socket.on('connect', function() {
+        socket.emit('my event', {data: 'I\'m connected!'});
+				socket.emit('join', '{{room_id}}');
+    });
+		// socket2.on('connect', function() {
+    //   socket.emit('my event', {data: 'I\'m connected!'});
+		// 	socket.emit('join', 'JOIN');
+    // });
+    socket.on('message', function(msg){
+      $("#msgs").append("<li>"+msg+"</li>")
+    });
+
+		// socket.on('broad_')
+
+    $("#but").on("click", function(e){
+      e.preventDefault();
+      socket.emit('user_msg',{'msg':u_name+' :-- '+$("#username").val(), 'room':'{{room_id}}'});
+			console.log($("#username").val());
+      $("#username").val('')
+    });
+</script>
+
+
+
+</body>
+</html>
