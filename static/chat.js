@@ -9,9 +9,6 @@ socket.on('connect', function() {
 
 window.onunload = ()=>socket.emit('remove_from_room', r_id)
 
-function remove_from_room(){
-  socket.emit('remove_from_room', r_id)
-}
 
 socket.on('message', function(data){
   var txt_class = ''
@@ -28,6 +25,27 @@ $("#chat-form").on('submit', function(e){
 	console.log($("#username").val());
   $("#text-box").val('')
 });
+
+socket.on('command', function(handler){
+  var player = document.getElementById('song');
+  console.log(handler.command)
+  if(handler['command'] == '!p'){
+    player.src = handler.link;
+    player.play();
+  }
+  else if(handler['command'] == '!ps'){
+    if (player.paused){
+      player.play();
+    }
+    else{
+      player.pause();
+    }
+  }
+
+});
+
+
+
 
 // window.addEventListener("beforeunload", function (e) {
 //   remove_from_room();

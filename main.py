@@ -2,21 +2,12 @@ from flask import Flask, render_template, Response, request, send_file, url_for,
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 
 import html
+import os
 import time
 import re
 import requests
 import youtube_dl
-
-from os import path
-from pydub import AudioSegment
-
-# # files
-# src = "/music/test.mp3"
-# dst = "/music/test.wav"
-
-# # convert wav to mp3
-# sound = AudioSegment.from_mp3(src)
-# sound.export(dst, format="wav")
+import glob
 
 ROOMS={}
 
@@ -82,6 +73,10 @@ def main_page(room_id):
 
 
 def yt_download(link,name):
+  '''
+  returns URL for the song on the local server
+  '''
+  
   ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': f'static/songs/{name}.wav',
@@ -94,7 +89,7 @@ def yt_download(link,name):
   with youtube_dl.YoutubeDL(ydl_opts) as ydl:
     ydl.download([link])
   
-  return f'https://hackathon-code.shanon333.repl.co/static/songs/{name}.wav'
+  return f'https://hackathon-code-pranav.shanon333.repl.co/static/songs/{name}.wav'
 
 
 
@@ -166,8 +161,6 @@ def rem(r_id):
   print(ROOMS)
 
 
-
-
 @socketio.on('join')
 def on_join(ms):
   if ms not in ROOMS.keys():
@@ -178,6 +171,7 @@ def on_join(ms):
   print(ms)
   print(ROOMS)
 
+
 @socketio.on('user_msg')
 def handle(data):
   print('IN HANDLE')
@@ -185,6 +179,18 @@ def handle(data):
   print('ROOM_ID '+rid)
   data['msg'] = html.escape(data['msg'])
   emit('message', data, room=data['room'])
+  if data['msg'][0] == '!':
+    link = ''
+    print('COMMAND:---'+data['msg'])
+    if data['msg'].split(' ')[0] == '!p':
+      for filename in glob.glob(f"static/songs/{data['room']}*"):
+        os.remove(filename) 
+      
+      link = data['msg'][2:].strip()
+      link = yt_download(link,str(data['room'])+'_'+link[len(link)-11:])
+      emit('message', {'ID':'BOT', 'u_name':'BOT', 'msg':str(link), 'room':data['room']}, room=data['room'])
+    emit('command', {'command':data['msg'].split(' ')[0].lower(), 'link':link}, room=data['room'])
+
 
 socketio.run(app, '0.0.0.0', 8080)
 # app.run('0.0.0.0', 8080)
