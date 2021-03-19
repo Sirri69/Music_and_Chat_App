@@ -4,8 +4,14 @@ var socket = io('https://hackathon-code-pranav.shanon333.repl.co');
 
 socket.on('connect', function() {
   socket.emit('my event', {data: 'I\'m connected!'});
-	socket.emit('join', '{{room_id}}');
+	socket.emit('join', r_id);
 });
+
+window.onunload = ()=>socket.emit('remove_from_room', r_id)
+
+function remove_from_room(){
+  socket.emit('remove_from_room', r_id)
+}
 
 socket.on('message', function(data){
   var txt_class = ''
@@ -18,7 +24,14 @@ socket.on('message', function(data){
 
 $("#chat-form").on('submit', function(e){
   e.preventDefault();
-  socket.emit('user_msg',{'ID':ID,'u_name':u_name,'msg':$("#text-box").val(), 'room':'{{room_id}}'});
+  socket.emit('user_msg',{'ID':ID,'u_name':u_name,'msg':$("#text-box").val(), 'room':r_id});
 	console.log($("#username").val());
   $("#text-box").val('')
 });
+
+// window.addEventListener("beforeunload", function (e) {
+//   remove_from_room();
+
+//   (e || window.event).returnValue = null;
+//   return null;
+// });

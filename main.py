@@ -156,14 +156,27 @@ def handle_my_custom_event(json):
 def c():
 	print('New connection')
 
+@socketio.on('disconnect')
+def d():
+  print('disconnected')
+
+@socketio.on('remove_from_room')
+def rem(r_id):
+  ROOMS[r_id] -=1
+  print(ROOMS)
+
 
 
 
 @socketio.on('join')
 def on_join(ms):
+  if ms not in ROOMS.keys():
+    ROOMS[ms] = 0
   join_room(ms)
+  ROOMS[ms] += 1
   print('TESTING')
   print(ms)
+  print(ROOMS)
 
 @socketio.on('user_msg')
 def handle(data):
@@ -175,4 +188,3 @@ def handle(data):
 
 socketio.run(app, '0.0.0.0', 8080)
 # app.run('0.0.0.0', 8080)
-
