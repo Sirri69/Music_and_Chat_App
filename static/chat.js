@@ -29,11 +29,12 @@ $("#chat-form").on('submit', function(e){
 socket.on('command', function(handler){
   var player = document.getElementById('song');
   console.log(handler.command)
-  if(handler['command'] == '!p'){
+  command = handler['command'].split(' ')
+  if(command[0] == '!p'){
     player.src = handler.link;
     player.play();
   }
-  else if(handler['command'] == '!ps'){
+  else if(command[0] == '!ps'){
     if (player.paused){
       player.play();
     }
@@ -41,15 +42,26 @@ socket.on('command', function(handler){
       player.pause();
     }
   }
-
+  else if (command[0] == '!v'){
+    console.log(command);
+    try{
+      if (eval('player.volume + (command[1]/100)')>1.0){
+        player.volume = 1;
+      }
+      else if (eval('player.volume + (command[1]/100)')<0.0){
+        player.volume = 0;
+      }
+    
+      else{
+      eval('player.volume = player.volume + (command[1]/100)');
+      console.log(player.volume);
+      }
+    }
+    catch (e){
+      console.log(e);
+    }
+    finally{
+    socket.emit('user_msg', {'ID':'BOT', 'u_name':'BOT', 'msg':'Current Volume is:- '+Math.round(player.volume*100,2), 'room':r_id});
+    }
+  }
 });
-
-
-
-
-// window.addEventListener("beforeunload", function (e) {
-//   remove_from_room();
-
-//   (e || window.event).returnValue = null;
-//   return null;
-// });

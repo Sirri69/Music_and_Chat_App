@@ -189,7 +189,7 @@ def handle(data):
       link = data['msg'][2:].strip()
       link = yt_download(link,str(data['room'])+'_'+link[len(link)-11:])
       emit('message', {'ID':'BOT', 'u_name':'BOT', 'msg':str(link), 'room':data['room']}, room=data['room'])
-    emit('command', {'command':data['msg'].split(' ')[0].lower(), 'link':link}, room=data['room'])
+    emit('command', {'command':data['msg'].lower(), 'link':link}, room=data['room'])
 
 
 socketio.run(app, '0.0.0.0', 8080)
