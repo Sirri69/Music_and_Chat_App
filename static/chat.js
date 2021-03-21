@@ -57,11 +57,24 @@ socket.on('command', function(handler){
       console.log(player.volume);
       }
     }
-    catch (e){
-      console.log(e);
-    }
+    catch (e){}
     finally{
     socket.emit('user_msg', {'ID':'BOT', 'u_name':'BOT', 'msg':'Current Volume is:- '+Math.round(player.volume*100,2), 'room':r_id});
     }
+  }
+  else if(command[0] == '!sk'){
+    console.log(command);
+    if (eval('player.currentTime + (command[1])')>player.duration){
+      player.currentTime = player.duration;
+    }
+    else if(eval('player.currentTime + (command[1])')<0){
+      player.currentTime = 0;
+    }
+    else{
+      console.log(eval('Math.floor(player.currentTime + (command[1]/1))'));
+      eval('player.currentTime = Math.floor(player.currentTime + (command[1]/1))');
+    }
+    console.log(player.currentTime);
+
   }
 });

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, Response, request, send_file, url_for, redirect, session
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from pytube import YouTube
 
 import html
 import os
@@ -162,15 +163,40 @@ def rem(r_id):
 
 
 @socketio.on('join')
-def on_join(ms):
-  if ms not in ROOMS.keys():
-    ROOMS[ms] = 0
-  join_room(ms)
-  ROOMS[ms] += 1
+def on_join(r_id):
+  if r_id not in ROOMS.keys():
+    ROOMS[r_id] = 0
+  join_room(r_id)
+  ROOMS[r_id] += 1
   print('TESTING')
-  print(ms)
+  print(r_id)
   print(ROOMS)
+  help_msg = f'''
+  Your Room ID is:- {r_id}. Share it with your friends so they can join too ! <br> <br>
+  <b>COMMANDS:-</b> <br> <hr>
+  <i>
+  !p <YouTube link> :: Plays the song from the link in the room. <br>
+  !ps :: Pause/Play the song <br>
+  !v ±<integer> :: Increases or Decreases volume <br>
+  !sk ±<interger> :: Seeks song to ahead or behind by given seconds.
+  </i>
 
+  '''
+  emit('message', {'ID':'BOT', 'u_name':'BOT', 'msg':help_msg, 'room':r_id})
+
+
+
+def handle_Commands(data):
+  link = ''
+  
+  if data['msg'].split(' ')[0] == '!p':
+    print('COMMAND:---'+data['msg'])
+    for filename in glob.glob(f"static/songs/{data['room']}*"):
+      os.remove(filename) 
+    link = data['msg'][2:].strip()
+    link = yt_download(link,str(data['room'])+'_'+link[len(link)-11:])
+    emit('message', {'ID':'BOT', 'u_name':'BOT', 'msg':'Now playing:-- <i>'+ YouTube(link).title +'. </i>', 'room':data['room']}, room=data['room'])
+  emit('command', {'command':data['msg'].lower(), 'link':link}, room=data['room'])
 
 @socketio.on('user_msg')
 def handle(data):
@@ -180,16 +206,8 @@ def handle(data):
   data['msg'] = html.escape(data['msg'])
   emit('message', data, room=data['room'])
   if data['msg'][0] == '!':
-    link = ''
-    print('COMMAND:---'+data['msg'])
-    if data['msg'].split(' ')[0] == '!p':
-      for filename in glob.glob(f"static/songs/{data['room']}*"):
-        os.remove(filename) 
-      
-      link = data['msg'][2:].strip()
-      link = yt_download(link,str(data['room'])+'_'+link[len(link)-11:])
-      emit('message', {'ID':'BOT', 'u_name':'BOT', 'msg':str(link), 'room':data['room']}, room=data['room'])
-    emit('command', {'command':data['msg'].lower(), 'link':link}, room=data['room'])
+    handle_Commands(data)
+    
 
 
 socketio.run(app, '0.0.0.0', 8080)
