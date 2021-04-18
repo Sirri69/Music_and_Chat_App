@@ -1,11 +1,9 @@
 from flask import Flask, render_template, Response, request, send_file, url_for, redirect, session
-from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from flask_socketio import SocketIO, emit, join_room
 from pytube import YouTube
 
 import html
 import os
-import time
-import re
 import requests
 import youtube_dl
 import glob
@@ -14,7 +12,7 @@ ROOMS={}
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'bruh'
+app.config['SECRET_KEY'] = '!S3CReT'
 
 global u_name
 u_name = 'Anyonmous'
@@ -37,12 +35,10 @@ def enter_room():
   
   u_name = request.args.get('u_name')
   r_id = request.args.get('r_id')
-  # print('R_ID:- '+str(len(r_id)))
+  
   if len(u_name) == 0:
-    session['u_name'] = 'ANYONMOUS'
     u_name = 'ANYONMOUS'
   if len(r_id) == 0:
-  #  print('IT GET"S HERE')
    r_id = gen_code()
   return redirect('/'+str(r_id))
 
@@ -63,7 +59,7 @@ rid = ''
 @app.route('/<room_id>')
 def main_page(room_id):
   if len(room_id) != 8:
-    return 'BRUHHH INVALID ROOM ID'
+    return 'INVALID ROOM ID'
   global u_name
 
   print('U_NAME'+str(u_name))
@@ -158,8 +154,7 @@ def d():
 
 @socketio.on('remove_from_room')
 def rem(r_id):
-  ROOMS[r_id] -=1
-  print(ROOMS)
+  ROOMS[r_id] -=1 #UNSTABLE CODE
 
 
 @socketio.on('join')
@@ -168,9 +163,6 @@ def on_join(r_id):
     ROOMS[r_id] = 0
   join_room(r_id)
   ROOMS[r_id] += 1
-  print('TESTING')
-  print(r_id)
-  print(ROOMS)
   help_msg = f'''
   Your Room ID is:- {r_id}. Share it with your friends so they can join too ! <br> <br>
   <b>COMMANDS:-</b> <br> <hr>
@@ -194,14 +186,13 @@ def handle_Commands(data):
     for filename in glob.glob(f"static/songs/{data['room']}*"):
       os.remove(filename) 
     link = data['msg'][2:].strip()
-    link = yt_download(link,str(data['room'])+'_'+link[len(link)-11:])
     emit('message', {'ID':'BOT', 'u_name':'BOT', 'msg':'Now playing:-- <i>'+ YouTube(link).title +'. </i>', 'room':data['room']}, room=data['room'])
+    link = yt_download(link,str(data['room'])+'_'+link[len(link)-11:])
   emit('command', {'command':data['msg'].lower(), 'link':link}, room=data['room'])
 
 @socketio.on('user_msg')
 def handle(data):
   print('IN HANDLE')
-  # room = data['room']
   print('ROOM_ID '+rid)
   data['msg'] = html.escape(data['msg'])
   emit('message', data, room=data['room'])
@@ -211,4 +202,3 @@ def handle(data):
 
 
 socketio.run(app, '0.0.0.0', 8080)
-# app.run('0.0.0.0', 8080)

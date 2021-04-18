@@ -10,6 +10,7 @@ flask = "^1.1.2"
 flask-socketio = "^5.0.1"
 pydub = "^0.24.1"
 youtube-dl = "^2021.2.4"
+pytube = "^10.6.0"
 
 [tool.poetry.dev-dependencies]
 

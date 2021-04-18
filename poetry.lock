@@ -120,6 +120,25 @@ client = ["requests (>=2.21.0)", "websocket-client (>=0.54.0)"]
 
 [[package]]
 category = "main"
+description = "Python 3 library for downloading YouTube Videos."
+name = "pytube"
+optional = false
+python-versions = ">=3.6"
+version = "10.6.0"
+
+[package.dependencies]
+typing-extensions = "*"
+
+[[package]]
+category = "main"
+description = "Backported and Experimental Type Hints for Python 3.5+"
+name = "typing-extensions"
+optional = false
+python-versions = "*"
+version = "3.7.4.3"
+
+[[package]]
+category = "main"
 description = "The comprehensive WSGI web application library."
 name = "werkzeug"
 optional = false
@@ -139,7 +158,7 @@ python-versions = "*"
 version = "2021.2.4.1"
 
 [metadata]
-content-hash = "eea8739a4d694268af56f6a5643d8062054e9022eaa56862fd49c56636b1e9ec"
+content-hash = "701670be7c6f8853ac94d9647743b5f94b259be2f4d104d175dc0a5a735111b2"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -232,6 +251,15 @@ python-engineio = [
 python-socketio = [
     {file = "python-socketio-5.0.4.tar.gz", hash = "sha256:f53fd0d5bd9f75a70492062f4ae6195ab5d34d67a29024d740f25e468392893e"},
     {file = "python_socketio-5.0.4-py2.py3-none-any.whl", hash = "sha256:870f8b00a63ef7c9a1f85fd70028624867bf246115e82625f28ef79def8847bb"},
+]
+pytube = [
+    {file = "pytube-10.6.0-py3-none-any.whl", hash = "sha256:701e432fac002ebbeb270e5be1aae50653a46566b8c491da92a729e2b07c07be"},
+    {file = "pytube-10.6.0.tar.gz", hash = "sha256:54bee35f12fb68f073881032d3005947cc37c0831cc1c65ece5b91d1d44e7df4"},
+]
+typing-extensions = [
+    {file = "typing_extensions-3.7.4.3-py2-none-any.whl", hash = "sha256:dafc7639cde7f1b6e1acc0f457842a83e722ccca8eef5270af2d74792619a89f"},
+    {file = "typing_extensions-3.7.4.3-py3-none-any.whl", hash = "sha256:7cb407020f00f7bfc3cb3e7881628838e69d8f3fcab2f64742a5e76b2f841918"},
+    {file = "typing_extensions-3.7.4.3.tar.gz", hash = "sha256:99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c"},
 ]
 werkzeug = [
     {file = "Werkzeug-1.0.1-py2.py3-none-any.whl", hash = "sha256:2de2a5db0baeae7b2d2664949077c2ac63fbd16d98da0ff71837f7d1dea3fd43"},
