@@ -86,7 +86,7 @@ def yt_download(link,name):
   with youtube_dl.YoutubeDL(ydl_opts) as ydl:
     ydl.download([link])
   
-  return f'https://hackathon-code-pranav.shanon333.repl.co/static/songs/{name}.wav'
+  return f'/static/songs/{name}.wav'
 
 
 

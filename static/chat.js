@@ -1,6 +1,6 @@
 var ID = '_' + Math.random().toString(36).substr(2, 9);
 
-var socket = io('https://hackathon-code-pranav.shanon333.repl.co');
+var socket = io('/');
 
 socket.on('connect', function() {
   socket.emit('my event', {data: 'I\'m connected!'});
