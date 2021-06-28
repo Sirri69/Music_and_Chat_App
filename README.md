@@ -3,3 +3,5 @@ A simple web app to chat with friends. Written in Python, with help of Flask to 
 
 You can also collaboratively stream audio with your friends in the room with Youtube links.
 
+Click [here](https://replit.com/github/Sirri69/Chat_App) to run on Replit:-
+
