@@ -120,9 +120,6 @@ def something():
 	return rv
 
 
-@app.route("/song")
-def song():
-	return send_file('song.mp3')
 
 import random, string
 def gen_code():
@@ -186,7 +183,7 @@ def handle_Commands(data):
     for filename in glob.glob(f"static/songs/{data['room']}*"):
       os.remove(filename) 
     link = data['msg'][2:].strip()
-    emit('message', {'ID':'BOT', 'u_name':'BOT', 'msg':'Now playing:-- <i>'+ YouTube(link).title +'. </i>', 'room':data['room']}, room=data['room'])
+    emit('message', {'ID':'BOT', 'u_name':'BOT', 'msg':'Now playing:-- <i>'+ 'Dummy Text' +'. </i>', 'room':data['room']}, room=data['room'])
     link = yt_download(link,str(data['room'])+'_'+link[len(link)-11:])
   emit('command', {'command':data['msg'].lower(), 'link':link}, room=data['room'])
 
